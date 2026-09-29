@@ -1,3 +1,3 @@
-module github.com/webtyp/agentcontext
+module webtyp.com/agentcontext
 
 go 1.26.8
