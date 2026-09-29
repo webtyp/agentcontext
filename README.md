@@ -5,9 +5,6 @@ model sees: who the agent is, a summary of the old conversation, the recent mess
 tools on offer, all within the model's token budget. It is pure. It never reads memory, never
 calls a model and never reads the clock, so everything it needs is a parameter.
 
-> **STATUS (remove this note when v0.1.0 is published):** the API below is specified in
-> `docs/PLAN.md` and not implemented yet.
-
 ## Getting started
 
 The orchestrator runs this on every turn:
