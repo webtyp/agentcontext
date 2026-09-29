@@ -1,4 +1,5 @@
 # agentcontext
+<img src="docs/img/badges.svg">
 
 The context compiler of `webtyp/agent`. Before each call to the model, it decides what the
 model sees: who the agent is, a summary of the old conversation, the recent messages, and the
