@@ -39,7 +39,7 @@ GOOS=js GOARCH=wasm go build ./...
 | `fmt`, `errors`, `strings`, `strconv` | `webtyp.com/fmt` | isomorphic, small under TinyGo |
 | `sort` | the insertion sort in this repo | `sort.Slice` uses reflection, a size tax under TinyGo |
 | `context` (stdlib) | `webtyp.com/context` | only if a function ever needs one (none does today) |
-| `time` | nothing, since timestamps arrive in `CreatedAt` | |
+| `time` (stdlib), `time.Now` | `webtyp.com/time`'s pure UTC formatters only (`FormatISO8601`, `Weekday`) | timestamps and the users' offset arrive in the input; this library never reads a clock |
 | `encoding/json` | nothing | reflection JSON costs ~1 MB of wasm |
 | `map[K]V` | a slice | TinyGo's map runtime is a size tax |
 

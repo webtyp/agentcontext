@@ -48,6 +48,11 @@ type Input struct {
 	Summaries []Summary
 	Turns     []Turn
 	Tools     []llm.ToolDef
+
+	// UTCOffsetMinutes is the users' timezone, e.g. -180 for UTC-3. Every user turn reaches the
+	// model prefixed with the local date and time it was said, so the model knows what "today"
+	// and "now" are.
+	UTCOffsetMinutes int
 }
 
 // Validate reports why b cannot budget a request, or nil.

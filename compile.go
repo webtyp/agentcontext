@@ -31,7 +31,11 @@ func Compile(in Input, b Budget, c llm.TokenCounter) (llm.Request, error) {
 	}
 
 	for i := 0; i < len(sortedTurns); i++ {
-		messages = append(messages, sortedTurns[i].Message)
+		msg := sortedTurns[i].Message
+		if msg.Role == llm.RoleUser {
+			msg.Content = stamp(sortedTurns[i].CreatedAt, in.UTCOffsetMinutes) + msg.Content
+		}
+		messages = append(messages, msg)
 	}
 
 	totalUsed := used(in, system, c)
@@ -141,6 +145,9 @@ func used(in Input, system string, c llm.TokenCounter) int {
 
 	for i := 0; i < len(in.Turns); i++ {
 		tokens += in.Turns[i].Tokens
+		if in.Turns[i].Message.Role == llm.RoleUser {
+			tokens += c.CountTokens(stamp(in.Turns[i].CreatedAt, in.UTCOffsetMinutes))
+		}
 	}
 
 	return tokens

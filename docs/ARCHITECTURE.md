@@ -23,6 +23,7 @@ database. The reasoning behind those rules is in
 | writes the summarization prompt (`SummaryRequest`) | calls the summarizer model |
 | builds the final request (`Compile`) | saves the `Summary`, deletes the folded turns |
 | renders the identity into `System` | assigns IDs and timestamps |
+| prefixes every user turn with its local date and time | knows the clock and the users' timezone (`Input.UTCOffsetMinutes`) |
 
 Keeping I/O out makes three things possible. The whole policy is testable with plain
 values. The same compiler works with any memory backend (IndexedDB in the browser, SQL on a
@@ -36,6 +37,23 @@ server). And the orchestrator cannot drift into a second copy of the rules.
 
 `Turn`, `Summary` and `Identity` are declared **here** because the compiler reads them.
 `agent` declares its memory ports in terms of these types, and `agentmemory` stores them.
+
+### Why every user turn carries its date
+
+A model does not know what day it is. Without a date in its context, "¿hasta qué hora atendemos
+hoy?" has no correct answer. `Compile` shows each user turn prefixed with the moment it was said,
+in the users' local time:
+
+```text
+[2026-09-29 Tuesday 10:00 UTC-03:00]
+¿Hasta qué hora atendemos hoy?
+```
+
+The stamp comes from `Turn.CreatedAt`, which never changes, so every earlier message keeps the
+same text and the request prefix stays stable (see [CONTEXT_ENGINEERING.md](CONTEXT_ENGINEERING.md)).
+The last user turn tells the model what "now" is. The stored turn is not modified, and the stamp's
+tokens count against the budget. A date written into `System` instead would change the most
+stable part of the request every minute.
 
 [Context window diagram](diagrams/CONTEXT_WINDOW.md): one turn, step by step.
 

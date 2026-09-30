@@ -83,7 +83,8 @@ func TestCompile_TurnsOldestFirstAndCallerSliceUntouched(t *testing.T) {
 		t.Fatalf("expected 2 messages, got %d", len(req.Messages))
 	}
 
-	if req.Messages[0].Content != "first" || req.Messages[1].Content != "second" {
+	const epoch = "[1970-01-01 Thursday 00:00 UTC+00:00]\n"
+	if req.Messages[0].Content != epoch+"first" || req.Messages[1].Content != epoch+"second" {
 		t.Errorf("messages not ordered oldest first: got %v, %v", req.Messages[0].Content, req.Messages[1].Content)
 	}
 
