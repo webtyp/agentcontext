@@ -45,7 +45,7 @@ hoy?" has no correct answer. `Compile` shows each user turn prefixed with the mo
 in the users' local time:
 
 ```text
-[2026-09-29 Tuesday 10:00 UTC-03:00]
+[2026-09-29 Tuesday 10:00]
 ¿Hasta qué hora atendemos hoy?
 ```
 
@@ -53,7 +53,8 @@ The stamp comes from `Turn.CreatedAt`, which never changes, so every earlier mes
 same text and the request prefix stays stable (see [CONTEXT_ENGINEERING.md](CONTEXT_ENGINEERING.md)).
 The last user turn tells the model what "now" is. The stored turn is not modified, and the stamp's
 tokens count against the budget. A date written into `System` instead would change the most
-stable part of the request every minute.
+stable part of the request every minute. The offset is not shown: a small model copied
+"UTC-03:00" into its answers.
 
 [Context window diagram](diagrams/CONTEXT_WINDOW.md): one turn, step by step.
 

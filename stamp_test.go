@@ -24,7 +24,7 @@ func TestCompile_UserTurnsCarryLocalDateAndTime(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	want := "[2026-09-29 Tuesday 10:00 UTC-03:00]\n¿Hasta qué hora atendemos hoy?"
+	want := "[2026-09-29 Tuesday 10:00]\n¿Hasta qué hora atendemos hoy?"
 	if req.Messages[0].Content != want {
 		t.Errorf("user turn:\n got %q\nwant %q", req.Messages[0].Content, want)
 	}
@@ -43,8 +43,8 @@ func TestCompile_LocalDateCrossesMidnight(t *testing.T) {
 		offset int
 		want   string
 	}{
-		{-180, "[2026-09-29 Tuesday 22:30 UTC-03:00]\nhola"},
-		{330, "[2026-09-30 Wednesday 07:00 UTC+05:30]\nhola"},
+		{-180, "[2026-09-29 Tuesday 22:30]\nhola"},
+		{330, "[2026-09-30 Wednesday 07:00]\nhola"},
 	}
 	for _, c := range cases {
 		in := agentcontext.Input{
@@ -63,15 +63,15 @@ func TestCompile_LocalDateCrossesMidnight(t *testing.T) {
 
 func TestCompile_StampCountsAgainstTheBudget(t *testing.T) {
 	// One user turn of 100 tokens. With quarterCounter the stamp
-	// "[1970-01-01 Thursday 00:00 UTC+00:00]\n" adds 9 tokens and the empty identity
-	// "You are . \n\n" adds 3, so with 12 of output the request needs exactly 124.
+	// "[1970-01-01 Thursday 00:00]\n" adds 7 tokens and the empty identity
+	// "You are . \n\n" adds 3, so with 12 of output the request needs exactly 122.
 	in := agentcontext.Input{Turns: []agentcontext.Turn{
 		{ID: "u", Message: llm.Message{Role: llm.RoleUser, Content: "x"}, Tokens: 100},
 	}}
-	if _, err := agentcontext.Compile(in, agentcontext.Budget{ContextTokens: 123, OutputTokens: 12}, quarterCounter{}); err == nil {
+	if _, err := agentcontext.Compile(in, agentcontext.Budget{ContextTokens: 121, OutputTokens: 12}, quarterCounter{}); err == nil {
 		t.Fatal("expected the stamp tokens to push the request over budget")
 	}
-	if _, err := agentcontext.Compile(in, agentcontext.Budget{ContextTokens: 124, OutputTokens: 12}, quarterCounter{}); err != nil {
-		t.Fatalf("100 + 9 + 3 + 12 = 124 must fit: %v", err)
+	if _, err := agentcontext.Compile(in, agentcontext.Budget{ContextTokens: 122, OutputTokens: 12}, quarterCounter{}); err != nil {
+		t.Fatalf("100 + 7 + 3 + 12 = 122 must fit: %v", err)
 	}
 }
