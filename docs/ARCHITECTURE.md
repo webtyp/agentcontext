@@ -56,6 +56,9 @@ tokens count against the budget. A date written into `System` instead would chan
 stable part of the request every minute. The offset is not shown: a small model copied
 "UTC-03:00" into its answers.
 
+`Stamp(createdAt, utcOffsetMinutes)` is exported so a prompt built outside `Compile` (the hybrid
+agent's writer and its yes/no question over data) shows "now" in the same words.
+
 [Context window diagram](diagrams/CONTEXT_WINDOW.md): one turn, step by step.
 
 ## What is implemented and what comes next
