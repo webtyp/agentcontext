@@ -2,6 +2,7 @@ package agentcontext_test
 
 import (
 	"testing"
+	"webtyp.com/time"
 
 	"webtyp.com/agentcontext"
 	"webtyp.com/fmt"
@@ -193,7 +194,7 @@ func TestCompact_FoldsOldestHalf(t *testing.T) {
 		turns = append(turns, agentcontext.Turn{
 			ID:        fmt.Sprintf("t%d", i),
 			Message:   llm.Message{Role: llm.RoleUser, Content: "msg"},
-			CreatedAt: int64(i * 10),
+			CreatedAt: time.Unix(i * 10),
 			Tokens:    100,
 		})
 	}

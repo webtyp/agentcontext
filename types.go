@@ -3,14 +3,15 @@ package agentcontext
 import (
 	"webtyp.com/fmt"
 	"webtyp.com/llm"
+	"webtyp.com/time"
 )
 
 // Turn is one message of the conversation as the agent stores it.
 type Turn struct {
 	ID        string
 	Message   llm.Message
-	Tokens    int   // tokens of Message.Content, counted with the model's TokenCounter when stored
-	CreatedAt int64 // unix seconds; the compiler orders turns by this, oldest first
+	Tokens    int       // tokens of Message.Content, counted with the model's TokenCounter when stored
+	CreatedAt time.Unix // the compiler orders turns by this, oldest first
 }
 
 // Summary is text written by a model that replaces the turns FromTurnID..ToTurnID.
@@ -20,7 +21,7 @@ type Summary struct {
 	Tokens     int // tokens of Text
 	FromTurnID string
 	ToTurnID   string
-	CreatedAt  int64 // unix seconds; the compiler orders summaries by this, oldest first
+	CreatedAt  time.Unix // the compiler orders summaries by this, oldest first
 }
 
 // Identity is who the agent is. It becomes llm.Request.System, the part of every request
