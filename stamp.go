@@ -17,5 +17,5 @@ var weekdayNames = [7]string{"Sunday", "Monday", "Tuesday", "Wednesday", "Thursd
 func Stamp(createdAt time.Unix, utcOffsetMinutes int) string {
 	local := createdAt + time.Unix(utcOffsetMinutes)*time.Minute
 	iso := time.FormatISO8601(local) // "YYYY-MM-DDTHH:MM:SSZ" of the shifted instant = local time
-	return fmt.Sprintf("[%s %s %s]\n", iso[:10], weekdayNames[time.Weekday(local)], iso[11:16])
+	return fmt.Sprintf("[%s %s %s]\n", iso[:10], weekdayNames[time.WeekdayUTC(local)], iso[11:16])
 }
